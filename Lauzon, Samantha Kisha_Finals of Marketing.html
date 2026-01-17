@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valderrama: Peak of Heritage</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --forest-green: #2D4030;
+            --mountain-gray: #4A4E52;
+            --clay-warm: #B87352;
+            --earth-white: #F9F7F2;
+            --text-dark: #333;
+            --success-green: #4CAF50;
+            --warning-yellow: #FFC107;
+            --danger-red: #F44336;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; line-height: 1.6; background-color: var(--earth-white); color: var(--text-dark); }
+        
+        /* Navigation */
+        nav { position: sticky; top: 0; background: var(--forest-green); padding: 1rem 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+        nav .logo { color: white; font-family: 'Playfair Display', serif; font-size: 1.5rem; }
+        nav ul { display: flex; list-style: none; }
+        nav ul li a { color: white; text-decoration: none; margin-left: 20px; font-size: 0.9rem; font-weight: bold; transition: 0.3s; }
+        nav ul li a:hover { color: var(--clay-warm); }
+
+        /* Hero Section */
+        #home { height: 100vh; background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://scontent.fmnl4-6.fna.fbcdn.net/v/t39.30808-6/477842572_1169130811241643_73123745348055814_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGm_erzmFD7Y02-r6YgO4CilfHRgbuddkyV8dGBu512TBEU_nUGRhBibt9jzfMJddeVwCFKvjAusxTpiyZdpl9X&_nc_ohc=ib3YGUofZ8UQ7kNvwEl3OQ5&_nc_oc=Adljf-EqcqIloaVj5D9zMguZf0ABH5ojh0KWV6oJSEbEqu7e5OmCL6teJav10gJw64DbpGRl_hDblHDerem44F7L&_nc_zt=23&_nc_ht=scontent.fmnl4-6.fna&_nc_gid=5E8ugSqlw-NhZf442uVU-A&oh=00_AfpqXQvsun9nF9vX3XMvofX7BZL-4lbM12phNb-67NEE6Q&oe=6970D21D'); background-size: cover; background-position: center; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; padding: 0 10%; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; margin-bottom: 1rem; }
+        .hero-text { max-width: 800px; font-size: 1.2rem; margin-bottom: 2rem; font-style: italic; }
+        .cta-btn { background: var(--clay-warm); color: white; padding: 1rem 2.5rem; text-decoration: none; border-radius: 50px; font-weight: bold; transition: 0.3s; display: inline-block; cursor: pointer; border: none; }
+        .cta-btn:hover { transform: scale(1.05); background: #a05d3d; }
+
+        /* Sections */
+        section { padding: 80px 10%; }
+        h2 { font-family: 'Playfair Display', serif; color: var(--forest-green); font-size: 2.5rem; margin-bottom: 2rem; border-bottom: 3px solid var(--clay-warm); display: inline-block; }
+
+        /* SWOT & Implementation Table */
+        .swot-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px; }
+        .swot-item { background: white; padding: 20px; border-left: 5px solid var(--clay-warm); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; margin-top: 2rem; background: white; }
+        th, td { border: 1px solid #ddd; padding: 15px; text-align: left; }
+        th { background: var(--forest-green); color: white; }
+        .total-row { background: #f2f2f2; font-weight: bold; }
+
+        /* Attractions Grid */
+        .attractions-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .card img { width: 100%; height: 200px; object-fit: cover; }
+        .card-content { padding: 20px; }
+
+        /* Map Hub Styling */
+        .map-hub { display: grid; grid-template-columns: 1fr 350px; gap: 20px; background: white; padding: 20px; border-radius: 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); }
+        .map-visual { background: #d4e3d6 url('https://www.transparenttextures.com/patterns/p6.png'); height: 500px; border-radius: 15px; position: relative; overflow: hidden; border: 2px solid #ccc; }
+        .pin { position: absolute; cursor: pointer; transition: 0.3s; z-index: 5; }
+        .pin:hover { transform: scale(1.2); }
+        .pin-icon { font-size: 2rem; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        .pin-label { background: white; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: bold; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .map-details { background: var(--earth-white); padding: 20px; border-radius: 15px; display: flex; flex-direction: column; gap: 15px; }
+        .vibe-tag { display: inline-block; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; background: #ddd; }
+        .traffic-bar-container { width: 100%; background: #eee; height: 10px; border-radius: 5px; margin-top: 5px; }
+        .traffic-fill { height: 100%; border-radius: 5px; transition: 0.5s; }
+        .video-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; }
+        .video-content { width: 90%; max-width: 400px; background: black; border-radius: 15px; overflow: hidden; position: relative; }
+        .close-modal { position: absolute; top: 20px; right: 20px; color: white; font-size: 2rem; cursor: pointer; }
+
+        /* Trail Tales Section Styling */
+        .tales-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
+        .tale-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-top: 4px solid var(--forest-green); }
+        .tale-user { font-weight: bold; color: var(--clay-warm); margin-bottom: 10px; display: block; }
+        .tale-link { display: inline-block; margin-top: 15px; font-size: 0.85rem; color: var(--forest-green); text-decoration: none; font-weight: bold; border: 1px solid var(--forest-green); padding: 5px 12px; border-radius: 20px; transition: 0.3s; }
+        .tale-link:hover { background: var(--forest-green); color: white; }
+
+        /* Eco-Stamp Passport Styling */
+        .passport-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.05); margin-top: 30px; }
+        .badge-container { display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px; }
+        .badge-slot { text-align: center; width: 150px; }
+        .stamp-circle { width: 100px; height: 100px; margin: 0 auto 15px; border: 2px dashed #ccc; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #fff; transition: 0.5s ease; }
+        .stamp-img { width: 60px; filter: grayscale(100%); opacity: 0.2; transition: 0.5s ease; }
+        .unlocked-circle { border: 2px solid var(--forest-green); background: #f0f4f0; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .unlocked-img { filter: grayscale(0%); opacity: 1; transform: scale(1.1) rotate(5deg); }
+        .unlock-link { color: var(--clay-warm); font-size: 0.8rem; font-weight: bold; text-decoration: underline; cursor: pointer; }
+        .progress-wrapper { max-width: 500px; margin: 40px auto 0; }
+        .progress-bg { background: #eee; height: 12px; border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+        #progress-fill { background: var(--forest-green); height: 100%; width: 0%; transition: width 0.8s ease; }
+
+        /* Travel Info Box */
+        .travel-info-box { background: white; border-left: 10px solid var(--forest-green); padding: 30px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .travel-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+        .travel-step { padding: 15px; background: #f8f9fa; border-radius: 8px; }
+
+        /* Contact & Footer */
+        form { display: flex; flex-direction: column; max-width: 600px; margin: 0 auto; }
+        input, textarea { padding: 15px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 5px; font-family: inherit; }
+        footer { background: var(--forest-green); color: white; padding: 2rem 5%; margin-top: 50px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .footer-copyright { flex: 1; }
+        .footer-links { text-align: right; }
+        .footer-links a { color: white; text-decoration: none; font-weight: bold; font-size: 0.9rem; transition: 0.3s; }
+        .footer-links a:hover { color: var(--clay-warm); }
+
+        @media (max-width: 900px) { .map-hub { grid-template-columns: 1fr; } .map-visual { height: 350px; } h1 { font-size: 2.2rem; } nav ul { display: none; } footer { flex-direction: column; text-align: center; gap: 1rem; } .footer-links { text-align: center; } }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">VALDERRAMA</div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#attractions">Attractions</a></li>
+            <li><a href="#map">Map</a></li>
+            <li><a href="#challenge">Eco-Challenge</a></li>
+            <li><a href="#tales">Trail Tales</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="home">
+        <p class="hero-welcome">Welcome to Valderrama!</p>
+        <h1>The Peak of Heritage</h1>
+        <p class="hero-text">"For a traveler who seeks more than a photo, Valderrama offers a sustainable yet memorable escape where the heights of adventure meet the depths of culture."</p>
+        <p style="max-width: 600px; margin-bottom: 2rem;">Unlike coastal Antique towns, Valderrama offers a unique combination of high-altitude trekking and living indigenous heritage.</p>
+        <a href="#about" class="cta-btn">Start Adventure</a>
+    </section>
+
+    <section id="about">
+        <h2>About Valderrama</h2>
+        <p>Valderrama is a beautiful mountain town in Antique with a history that goes back to 1865. Long before it became a municipality, it was a small village originally called <strong>Caberi-an</strong>. The town was eventually named after Manuel Blanco Valderrama, a Spanish official who once served as the Governor-General of the Philippines. While its name comes from history books, its heart belongs to the <strong>Iraynon-Bukidnon</strong> people. This area is their ancestral home, where they have lived in harmony with the mountains for generations. Today, the town is dedicated to a special mission: growing a type of tourism that is <strong>kind to nature and respectful of the local culture</strong>, making sure the traditions and forests of Valderrama stay protected for the future.</p>
+        
+        <h3 style="margin-top:2rem">The Conscious Explorer</h3>
+        <p>This destination is perfectly designed for travelers aged 18 to 35 who are looking for more than just a typical vacation. Valderrama appeals to young adventurists and cultural enthusiasts who prefer hidden gems over crowded tourist spots. It offers a unique mix of high-energy outdoor activities and deep cultural experiences, making it a great fit for those who care about the planet. By choosing this "off-the-beaten-path" journey, travelers get to immerse themselves in the local way of life while supporting environmental conservation. It is a place for a new generation of explorers who want their travels to be authentic, sustainable, and meaningful.</p>
+
+        <div class="swot-grid">
+            <div class="swot-item"><strong>Strengths:</strong> Authentic culture and heritage, Untouched landscapes, and Sustainable tourism practices.</div>
+            <div class="swot-item"><strong>Weaknesses:</strong> Limited accessibility (remote location), Low digital footprint, and Seasonal accessibility.</div>
+            <div class="swot-item"><strong>Opportunities:</strong> Growth in eco-tourism, Slow travel trends, and Partnerships with local communities.</div>
+            <div class="swot-item"><strong>Threats:</strong> Environmental damage, Climate change effects on trails, and Over-tourism at sacred sites.</div>
+        </div>
+
+        <h3 style="margin-top:2rem">1-Year Implementation Roadmap</h3>
+        <table>
+            <tr><th>Phase</th><th>Timeline</th><th>Key Action</th></tr>
+            <tr><td>Phase 1: Foundation</td><td>1-4 Months</td><td>Collaborate with local guides and indigenous communities to align on sustainable tourism practices.</td></tr>
+            <tr><td>Phase 2: Technical</td><td>5-8 Months</td><td>Developing the Interactive Map and Eco-Challenge. Additionally, installing eco-friendly QR markers on trails for interactive experiences and digital storytelling.</td></tr>
+            <tr><td>Phase 3: Official Launch</td><td>9-10 Months</td><td>Launch the website and social media campaigns to attract tourists.</td></tr>
+            <tr><td>Phase 4: Monitoring and Evaluation</td><td>11-12 Months</td><td>Ongoing monitoring of "Sustainability Scores," reward distribution, and platform maintenance.</td></tr>
+        </table>
+
+        <h3 style="margin-top:2rem">Proposed Budget: ₱150,000</h3>
+        <p style="font-style: italic; margin-bottom: 10px;">A "Lean & Green" budget focused on long-term value over short-term hype.</p>
+        <table>
+            <tr><th>Allocation Category</th><th>Description</th><th>Amount</th></tr>
+            <tr><td>Digital Platform</td><td>Annual Map hosting, domain maintenance, and security.</td><td>₱40,000</td></tr>
+            <tr><td>Community Training</td><td>Local workshops on eco-tourism and digital storytelling.</td><td>₱35,000</td></tr>
+            <tr><td>Physical Eco-Markers</td><td>QR Code trail checkpoints and safety signage.</td><td>₱20,000</td></tr>
+            <tr><td>Heritage Incentives</td><td>Production of Nito bracelets and Patadyong rewards.</td><td>₱35,000</td></tr>
+            <tr><td>Marketing Boosts</td><td>Targeted social media promotion for peak seasons.</td><td>₱20,000</td></tr>
+            <tr class="total-row"><td>Total 1-Year Investment</td><td></td><td>₱150,000</td></tr>
+        </table>
+        <p style="margin-top:15px; font-weight: bold; color: var(--forest-green);">Sustainability Note: The peak of heritage will leverage User-Generated Content (UGC) via the Eco-Stamp challenge, allowing the travelers to market Valderrama for us.</p>
+    </section>
+
+    <section id="attractions">
+        <h2>Must-Visit Attractions</h2>
+        <div class="attractions-grid">
+            <div class="card">
+                <img src="https://scontent.fmnl4-4.fna.fbcdn.net/v/t39.30808-6/476822658_1169130737908317_2023553500243199505_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeGib48GryO2tV268Vx8sG7GsK93KbrnAL-wr3cpuucAv5agvibcGJRIevDwCqo8nLFMNbSWU5qkTOx-LN3WKouT&_nc_ohc=VNQ5BLMUiKkQ7kNvwHUOjZr&_nc_oc=AdnMO3jNgDiFomSjWj1yXO7b-WbCVrsSTWvnbhmGOumuH_AWHp0-oQ_1fpV51Uz6rIuhGiI6S1eh9WQOnOhH7rNz&_nc_zt=23&_nc_ht=scontent.fmnl4-4.fna&_nc_gid=phzEtM4LP9EgWUAXSjXVbA&oh=00_Afp46Mz9jcyhFLtm0icSuxADL9Xiz7BwAKFqWtzQjouMug&oe=6970ED64" alt="Valderrama Trilogy Hike">
+                <div class="card-content">
+                    <h3>The Valderrama Trilogy Hike</h3>
+                    <p>The Valderrama Trilogy is an intense trekking challenge that covers three major peaks: <strong>Mt. Igcoron, Mt. Igduao, and Mt. Taripis.</strong> This circuit offers a diverse landscape ranging from sharp limestone ridges and rolling grasslands to dense tropical forests. Depending on the hiker's pace and weather conditions, the full trilogy typically takes 10 to 14 hours to complete, often starting well before dawn. It is highly recommended for experienced hikers seeking a test of endurance and breathtaking 360-degree views of the Antique mountain range.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://www.journeyera.com/wp-content/uploads/2022/07/mount-baloy-antique-panay-08467.jpg" alt="Mt. Baloy Summit">
+                <div class="card-content">
+                    <h3>Mt.Baloy</h3>
+                    <p>Known as one of the most <strong>difficult climbs</strong> in the Panay mountain range, Mt. Baloy is a sacred and majestic peak that borders Antique and Iloilo. It offers a raw, mossy forest environment and is home to unique flora and fauna, including the world’s largest flower, the Rafflesia. This is a multi-day expedition rather than a simple trek, usually requiring 3 to 4 days of hiking to reach the summit and return. It is a bucket-list destination for mountaineers looking for deep wilderness immersion.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://scontent.fmnl4-6.fna.fbcdn.net/v/t39.30808-6/538817162_1097088389230465_9196623441280298210_n.jpg?_nc_cat=111&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeHul6iyGgn9j_UFl8FDJKV1PMMFDygZWbI8wwUPKBlZsnpjMBh8cH8Q_lFA23VfKuDlXB1BmXRgYqd_aDl_PP5g&_nc_ohc=o_ll8sEUSooQ7kNvwGJAIrI&_nc_oc=AdlHuMKWr0NbT6t7FkfGHBZyFrXRSHZ6Svpk8sgJwZruyjEw6Aw7xHRZAXpXAMhOOQ_2oYsXv04CVo5I0aA2GPjP&_nc_zt=23&_nc_ht=scontent.fmnl4-6.fna&_nc_gid=FxM-rCDrqw0EOrkvoB4iNA&oh=00_AfrAxH9rNyrM-Q5eZZ3oz6c2fXH7sDRJeG2zbZPrOWu3TA&oe=69706885" alt="Antique Rice Terraces">
+                <div class="card-content">
+                    <h3>Antique Rice Terraces</h3>
+                    <p>The Antique Rice Terraces (located in the highlands of the Valderrama-San Remigio border) are a <strong>cultural treasure hand-carved by the Iraynon-Bukidnon people.</strong> These emerald-green steps showcase the indigenous engineering and agricultural heritage of the region. To reach the best viewing decks from the Valderrama side, visitors should prepare for a trek of approximately 4 to 5 hours. The site offers a peaceful atmosphere and a rare look at a living cultural landscape that remains largely untouched by modernization.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://scontent.fmnl4-6.fna.fbcdn.net/v/t39.30808-6/480213634_605109572283943_7546775343248579888_n.jpg?_nc_cat=107&ccb=1-7&_nc_sid=833d8c&_nc_eui2=AeFXBZae5_9thrFoiuTpMuJGFYZrvlzS_IwVhmu-XNL8jJo-wAfA7tmINa1Nkic-aYrvqCYjWKvoRUfecam545PL&_nc_ohc=C47mvAGkuH8Q7kNvwGoWXKU&_nc_oc=Adm097sElyNq6088wbcYqUwA3Hweb6if8k7cXH0YlZNuP0ORf_BXSLdWxj55hQtF8OPF9Q_1A0zWFnAg_n-4VQhp&_nc_zt=23&_nc_ht=scontent.fmnl4-6.fna&_nc_gid=PLEgpHLAgm7ejEh5SXAVfQ&oh=00_AfrMTz6mw3BVFwljTUb51LggJ9LDbcFRCHK6qaEm0EKFxA&oe=697127B3" 
+                     alt="Villa Valderrama Mountain Resort" 
+                     style="object-position: center 70%;"> 
+                <div class="card-content">
+                    <h3>Villa Valderrama Mountain Resort</h3>
+                    <p>A local mountain resort that serves as the primary base camp and jump-off point for tourists and hikers. It offers refreshing pools fed by <strong>natural springs</strong> and <strong>native-style huts</strong> for an authentic overnight stay.</p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://scontent.fmnl4-7.fna.fbcdn.net/v/t39.30808-6/558491006_1145494697723167_5102223308796477742_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=127cfc&_nc_eui2=AeHUm2Wu1mnK-cVlfx3BYxheWAb7clMWp3FYBvtyUxancX6wDgoz5b2zPk2w6w1PujaOhaeNIjxj1Z5B1OvhckyQ&_nc_ohc=jOPVPnZv9yAQ7kNvwHSq9fh&_nc_oc=AdmI0dJ_41bITyKlzX2bWLUmw1QsDPQwM20zNYJdcsi0pi7jRX5wh-c7pexwfrZ2RRf0lIfZoR-dB54qzC2KoTXD&_nc_zt=23&_nc_ht=scontent.fmnl4-7.fna&_nc_gid=QrtOv-R4VMTdBZcZfywlTQ&oh=00_AfoJdOayY0gXp3-hhDDiEqgok2_HKq2T-jHALy1fqiUybA&oe=6970DC63" alt="Kawa-Kawa Falls">
+                <div class="card-content">
+                    <h3>Kawa-Kawa Falls</h3>
+                    <p>Located near the resort, these falls feature unique natural rock formations that look like <strong>giant cooking pots, or kawa.</strong> The water is crystal clear and cool, making it a perfect spot for a quick dip after a long day of exploring. It is an easy, short walk from the main resort area, so no heavy trekking is required to enjoy it.</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:3rem; background: var(--mountain-gray); color: white; padding: 2rem; border-radius: 10px;">
+            <h3>Hiker's Checklist</h3>
+            <ul style="list-style: none; padding-top: 10px;">
+                <li>💧 Carry sufficient water and snacks.</li>
+                <li>🥾 Wear appropriate hiking gear and sturdy shoes.</li>
+                <li>👥 Inform a companion or guide of your plans.</li>
+                <li>🦅 Respect local wildlife and leave no trace.</li>
+                <li>🔍 Check weather forecasts and trail conditions.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="map" style="background: #e8e8e8;">
+        <h2>"The Path of the Iraynon"</h2>
+        <p style="margin-bottom: 20px;">Clickable map pins that replace paper brochures, featuring real-time trail updates, safety alerts, and POV videos from Iraynon-Bukidnon guides.</p>
+
+        <div class="map-hub">
+            <div class="map-visual" id="map-area">
+                <div class="pin" style="top: 20%; left: 30%;" onclick="showInfo('trilogy')">
+                    <div class="pin-icon">📍</div>
+                    <div class="pin-label">Trilogy Hike</div>
+                </div>
+                <div class="pin" style="top: 15%; left: 70%;" onclick="showInfo('baloy')">
+                    <div class="pin-icon">📍</div>
+                    <div class="pin-label">Mt. Baloy</div>
+                </div>
+                <div class="pin" style="top: 50%; left: 50%;" onclick="showInfo('terraces')">
+                    <div class="pin-icon">📍</div>
+                    <div class="pin-label">Rice Terraces</div>
+                </div>
+                <div class="pin" style="top: 75%; left: 25%;" onclick="showInfo('villa')">
+                    <div class="pin-icon">🏠</div>
+                    <div class="pin-label">Villa Valderrama</div>
+                </div>
+                <div class="pin" style="top: 60%; left: 80%;" onclick="showInfo('kawa')">
+                    <div class="pin-icon">🌊</div>
+                    <div class="pin-label">Kawa-Kawa Falls</div>
+                </div>
+            </div>
+
+            <div class="map-details" id="detail-panel">
+                <div id="default-msg">
+                    <h3 style="color:var(--forest-green)">Select a Landmark</h3>
+                    <p style="font-size:0.9rem">Click a pin on the map to see real-time trail vibe and POV previews.</p>
+                </div>
+                <div id="info-content" style="display:none">
+                    <h3 id="info-title" style="color:var(--forest-green)">---</h3>
+                    <span id="info-vibe" class="vibe-tag">---</span>
+                    <div style="margin: 15px 0;">
+                        <p style="font-size:0.8rem; font-weight:bold;">Real-Time Trail Traffic:</p>
+                        <div class="traffic-bar-container"><div id="traffic-fill-map" class="traffic-fill"></div></div>
+                        <small id="traffic-status">---</small>
+                    </div>
+                    <button class="cta-btn" style="width:100%; padding: 0.8rem;" id="pov-btn">WATCH POV PREVIEW</button>
+                    <p id="info-desc" style="font-size:0.85rem; margin-top:10px; line-height:1.4;">---</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="video-modal" id="video-modal">
+        <span class="close-modal" onclick="closeModal()">&times;</span>
+        <div class="video-content">
+            <div style="padding:40px; color:white; text-align:center;">
+                <p id="modal-title" style="font-weight:bold; margin-bottom:10px;"></p>
+                <p style="font-size:0.9rem; margin-bottom:20px;">Ready for the POV experience? Click below to watch the trail preview.</p>
+                <a href="" id="modal-link" target="_blank" class="cta-btn">OPEN FULL VIDEO 🎥</a>
+            </div>
+        </div>
+    </div>
+
+    <section id="challenge">
+        <h2>Eco-Stamp Challenge</h2>
+        <p><em>"Leave Only Footprints"</em> — Unlock badges by being a guardian of the land.</p>
+        
+        <div class="passport-card">
+            <div class="badge-container">
+                <div class="badge-slot">
+                    <div id="circle-1" class="stamp-circle">
+                        <img id="img-1" src="https://cdn-icons-png.flaticon.com/512/2913/2913520.png" class="stamp-img" alt="Bottle">
+                    </div>
+                    <p style="font-weight:bold; font-size:0.9rem;">Zero-Waste Trail</p>
+                    <span class="unlock-link" onclick="handleUnlock(1, 'Zero-Waste Trail', 'Upload a photo of your reusable bottle at the summit.')">Unlock Stamp</span>
+                </div>
+                <div class="badge-slot">
+                    <div id="circle-2" class="stamp-circle">
+                        <img id="img-2" src="https://cdn-icons-png.flaticon.com/512/3842/3842221.png" class="stamp-img" alt="Culture">
+                    </div>
+                    <p style="font-weight:bold; font-size:0.9rem;">Cultural Connector</p>
+                    <span class="unlock-link" onclick="handleUnlock(2, 'Cultural Connector', 'Share a video of you learning a local Iraynon word.')">Unlock Stamp</span>
+                </div>
+                <div class="badge-slot">
+                    <div id="circle-3" class="stamp-circle">
+                        <img id="img-3" src="https://cdn-icons-png.flaticon.com/512/1170/1170577.png" class="stamp-img" alt="Market">
+                    </div>
+                    <p style="font-weight:bold; font-size:0.9rem;">Market Supporter</p>
+                    <span class="unlock-link" onclick="handleUnlock(3, 'Market Supporter', 'Show a photo of a local product from Valderrama Market.')">Unlock Stamp</span>
+                </div>
+            </div>
+
+            <div class="progress-wrapper text-center">
+                <div class="progress-bg"><div id="progress-fill"></div></div>
+                <p id="progress-text" style="font-size:0.8rem; font-weight:bold; color:var(--mountain-gray)">Stamps Collected: 0/3</p>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin-top:2rem;">
+            <p><strong>The Rewards:</strong> Complete the challenge by collecting three stamps! You’ll earn a hand-woven Nito bracelet (a traditional 'badge of honor' from the Iraynon-Bukidnon) paired with a Patadyong-accented tote bag crafted by local artisans, plus a featured spot on the 'Eco-Hero of the Month' highlight on the official Valderrama Tourism social media pages.</p>
+        </div>
+    </section>
+
+    <section id="tales" style="background: #f0f2f0;">
+        <h2>Trail Tales</h2>
+        <p>Real experiences from travelers who have explored the peak of heritage.</p>
+        
+        <div class="tales-grid">
+            <div class="tale-card">
+                <span class="tale-user">@Traveler_POV</span>
+                <p>"The hike was soul-cleansing! The foggy trilogy peaks are something you have to see for yourself."</p>
+                <a href="https://vt.tiktok.com/ZSaJcxwUV/" target="_blank" class="tale-link">View Post 🎥</a>
+            </div>
+
+            <div class="tale-card">
+                <span class="tale-user">Discover Antique</span>
+                <p>"Villa Valderrama Mountain Resort ⛰️ The best spot ever! A perfect jump-off point for explorers."</p>
+                <a href="https://www.facebook.com/DiscoverAntiquePH/posts/villa-valderrama-mountain-resort-%EF%B8%8Fthe-best-spot-ever-lets-godiscoverantique-viaj/563963459209630/" target="_blank" class="tale-link">View Story 📖</a>
+            </div>
+
+            <div class="tale-card">
+                <span class="tale-user">Becoming Filipino</span>
+                <p>"Immersing with the Iraynon-Bukidnon community was the highlight of my Antique trip. Authentic and pure."</p>
+                <a href="https://www.facebook.com/becomingfilipino/posts/pfbid02dF7zToCr3YWotonQUi8RAoKGKQ3Lw7STVYmgAPm2krvBXTtRKBW1ZBDjtReFxSy8l" target="_blank" class="tale-link">View Experience 🌏</a>
+            </div>
+
+            <div class="tale-card">
+                <span class="tale-user">Nature Reel</span>
+                <p>"Chasing waterfalls at Kawa-Kawa. The rock formations are naturally carved like cooking pots!"</p>
+                <a href="https://www.facebook.com/reel/2397363993948883" target="_blank" class="tale-link">Watch Reel 🌊</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="travel">
+        <h2>How to Get Here?</h2>
+        <div class="travel-info-box">
+            <p>To reach <strong>Valderrama, Antique</strong>, follow these travel steps:</p>
+            <div class="travel-grid">
+                <div class="travel-step">
+                    <strong>1. Air Travel</strong>
+                    <p>Fly to nearby airports like <strong>Iloilo (ILO)</strong> or <strong>Caticlan (MPH)</strong> for Boracay.</p>
+                </div>
+                <div class="travel-step">
+                    <strong>2. Land Transport</strong>
+                    <p>Take a bus or van from the airport terminals to Valderrama town center.</p>
+                </div>
+                <div class="travel-step">
+                    <strong>3. Local Access</strong>
+                    <p>Hire a local <strong>tricycle</strong> or <strong>habal-habal</strong> (motorcycle taxi) to reach these must-visit destinations.</p>
+                </div>
+            </div>
+            <p style="margin-top:20px; font-style: italic; color: var(--mountain-gray);">
+                Note: Accommodations are basic, consisting of local guesthouses and the Villa Valderrama Mountain Resort.
+            </p>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Book a Local Guide</h2>
+        <form>
+            <input type="text" placeholder="Full Name" required>
+            <input type="email" placeholder="Email Address" required>
+            <textarea rows="5" placeholder="Inquiry Details"></textarea>
+            <button type="submit" class="cta-btn">Send Message</button>
+        </form>
+        <div style="text-align:center; margin-top: 2rem;">
+            <p style="margin-bottom: 1rem;">Support the Iraynon Bukidnon community by booking a local guide for authentic experiences!</p>
+            <div class="social-links" style="display: flex; justify-content: center; gap: 20px;">
+                <a href="#" style="color:var(--forest-green); font-weight:bold;">Facebook</a>
+                <a href="#" style="color:var(--forest-green); font-weight:bold;">Instagram</a>
+                <a href="#" style="color:var(--forest-green); font-weight:bold;">Twitter</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-copyright">
+            <p>&copy; 2026 Valderrama Tourism - Peak of Heritage. All Rights Reserved. Created by Samantha Kisha Lauzon of BSTM 2-4N.</p>
+        </div>
+        <div class="footer-links">
+            <a href="https://docs.google.com/document/d/1Rc3MrdsStgCZy2yzV4li2HZUZ-18K6eJlW5-YgINkbE/edit?usp=sharing" target="_blank">References</a>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth Scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Map Logic
+        const locationData = {
+            trilogy: {
+                title: "Valderrama Trilogy Hike",
+                vibe: "Foggy & Epic 🌫️",
+                traffic: "80%",
+                trafficColor: "#F44336",
+                status: "High Traffic (Busy Trail)",
+                desc: "3 Peaks: Mt. Igcoron, Mt. Igduao, and Mt. Taripis. Challenging ridges await.",
+                video: "https://vt.tiktok.com/ZSaJBCjNg/"
+            },
+            baloy: {
+                title: "Mt. Baloy Summit",
+                vibe: "Cool & Wild 🌿",
+                traffic: "20%",
+                trafficColor: "#4CAF50",
+                status: "Low Traffic (Peaceful)",
+                desc: "The sacred peak of Panay. Home to Rafflesia and ancient mossy forests.",
+                video: "https://vt.tiktok.com/ZSaJkoSh4/"
+            },
+            terraces: {
+                title: "Antique Rice Terraces",
+                vibe: "Green & Serene 🌾",
+                traffic: "45%",
+                trafficColor: "#FFC107",
+                status: "Moderate Traffic",
+                desc: "Hand-carved heritage by the Iraynon-Bukidnon. Best visited at sunrise.",
+                video: "https://www.tiktok.com/@chrisyucom/video/7532130642646043912"
+            },
+            villa: {
+                title: "Villa Valderrama Resort",
+                vibe: "Relaxing & Fresh 🏊",
+                traffic: "30%",
+                trafficColor: "#4CAF50",
+                status: "Plenty of Space",
+                desc: "Your basecamp. Natural spring pools and native huts for hikers.",
+                video: "https://www.facebook.com/reel/1239320541556340"
+            },
+            kawa: {
+                title: "Kawa-Kawa Falls",
+                vibe: "Sunny & Refreshing ☀️",
+                traffic: "60%",
+                trafficColor: "#FFC107",
+                status: "Medium Traffic",
+                desc: "Giant rock pots and crystal-clear water. Perfect for a quick dip.",
+                video: "https://www.facebook.com/reel/1709241596407704"
+            }
+        };
+
+        function showInfo(locKey) {
+            const data = locationData[locKey];
+            document.getElementById('default-msg').style.display = 'none';
+            document.getElementById('info-content').style.display = 'block';
+            document.getElementById('info-title').innerText = data.title;
+            document.getElementById('info-vibe').innerText = data.vibe;
+            document.getElementById('traffic-fill-map').style.width = data.traffic;
+            document.getElementById('traffic-fill-map').style.backgroundColor = data.trafficColor;
+            document.getElementById('traffic-status').innerText = "Status: " + data.status;
+            document.getElementById('info-desc').innerText = data.desc;
+            document.getElementById('pov-btn').onclick = () => openModal(data.title, data.video);
+        }
+
+        function openModal(title, link) {
+            document.getElementById('video-modal').style.display = 'flex';
+            document.getElementById('modal-title').innerText = "POV: " + title;
+            document.getElementById('modal-link').href = link;
+        }
+
+        function closeModal() {
+            document.getElementById('video-modal').style.display = 'none';
+        }
+
+        // ECO-STAMP CHALLENGE LOGIC
+        let unlockedCount = 0;
+        const unlockedStamps = new Set();
+
+        function handleUnlock(id, title, task) {
+            if (unlockedStamps.has(id)) return;
+
+            const confirmUpload = confirm(`CHALLENGE: ${title}\n\nTask: ${task}\n\nClick OK to upload proof and unlock your stamp!`);
+            
+            if (confirmUpload) {
+                unlockedStamps.add(id);
+                unlockedCount++;
+
+                document.getElementById(`circle-${id}`).classList.add('unlocked-circle');
+                document.getElementById(`img-${id}`).classList.add('unlocked-img');
+                
+                const percentage = (unlockedCount / 3) * 100;
+                document.getElementById('progress-fill').style.width = percentage + '%';
+                document.getElementById('progress-text').innerText = `Stamps Collected: ${unlockedCount}/3`;
+
+                if (unlockedCount === 3) {
+                    setTimeout(() => {
+                        alert("🎉 CONGRATULATIONS ECO-HERO!\n\nYou have completed the Valderrama Heritage Passport. Head to the Municipal Tourism Office to claim your Nito bracelet and Patadyong tote bag!");
+                    }, 500);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
